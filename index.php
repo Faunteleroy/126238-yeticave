@@ -17,7 +17,13 @@ $tomorrow = strtotime('tomorrow midnight');
 $now = strtotime('now');
 
 $count_hour = floor(($tomorrow - $now)/3600);
+if ($count_hour < 10) {
+    $count_hour = 0 . $count_hour;
+}
 $count_min = floor(($tomorrow - $now)/60)%60;
+if ($count_min < 10) {
+    $count_min = 0 . $count_min;
+}
 
 $lot_time_remaining = "$count_hour" . ":" . "$count_min";
 // далее нужно вычислить оставшееся время до начала следующих суток и записать его в переменную $lot_time_remaining
