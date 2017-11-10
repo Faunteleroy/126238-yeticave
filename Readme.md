@@ -1,7 +1,7 @@
 # Личный проект «YetiCave» 
 
 * Студент: [Mary Voronova](https://up.htmlacademy.ru/php/3/user/126238).
-* Наставник: `Неизвестно`.
+* Наставник: [Сергей Симонян](https://htmlacademy.ru/profile/id361963).
 
 ---
 
