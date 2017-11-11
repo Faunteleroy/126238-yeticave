@@ -16,6 +16,14 @@ $tomorrow = strtotime('tomorrow midnight');
 // временная метка для настоящего времени
 $now = strtotime('now');
 
+define("SECONDS_IN_HOUR", 3600);
+define("SECONDS_IN_MIN", 60);
+
+$count_hour = floor(($tomorrow - $now) / SECONDS_IN_HOUR);
+$count_hour = str_pad($count_hour, 2, "0", STR_PAD_LEFT);
+$count_min = floor((($tomorrow - $now) % SECONDS_IN_HOUR) / SECONDS_IN_MIN);
+$count_min = str_pad($count_min, 2, "0", STR_PAD_LEFT);
+$lot_time_remaining = $count_hour . ":" . $count_min;
 // далее нужно вычислить оставшееся время до начала следующих суток и записать его в переменную $lot_time_remaining
 ?>
 <!DOCTYPE html>
