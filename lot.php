@@ -19,7 +19,7 @@ function bets_time($time_label) {
     $bet_time;
 
     if ($count_time > SECONDS_IN_DAY) {
-        $bet_time = date("d-m-Y \в H:i", $time_label);
+        $bet_time = date("d.m.Y \в H:i", $time_label);
     }
     else if ($count_time >= SECONDS_IN_HOUR) {
         $count_hour = floor(($now - $time_label) / SECONDS_IN_HOUR);
