@@ -26,7 +26,14 @@ $count_min = str_pad($count_min, 2, "0", STR_PAD_LEFT);
 $lot_time_remaining = $count_hour . ":" . $count_min;
 // далее нужно вычислить оставшееся время до начала следующих суток и записать его в переменную $lot_time_remaining
 
-$category_list = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
+$category_list = [
+    'boards' => "Доски и лыжи",
+    'attachment' => "Крепления",
+    'boots' => "Ботинки",
+    'clothing' => "Одежда",
+    'tools' => "Инструменты",
+    'other' => "Разное"
+];
 $cur_category = 0;
 
 $ads_list = [
@@ -122,24 +129,11 @@ $ads_list = [
         <h2 class="promo__title">Нужен стафф для катки?</h2>
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
         <ul class="promo__list">
-            <li class="promo__item promo__item--boards">
-                <a class="promo__link" href="all-lots.html"><?=$category_list[$cur_category]; $cur_category++; ?>"</a>
+            <?php foreach ($category_list as $key => $val): ?>
+            <li class="promo__item promo__item--<?=$key; ?>">
+                <a class="promo__link" href="all-lots.html"><?=$val; ?></a>
             </li>
-            <li class="promo__item promo__item--attachment">
-                <a class="promo__link" href="all-lots.html"><?=$category_list[$cur_category]; $cur_category++; ?></a>
-            </li>
-            <li class="promo__item promo__item--boots">
-                <a class="promo__link" href="all-lots.html"><?=$category_list[$cur_category]; $cur_category++; ?></a>
-            </li>
-            <li class="promo__item promo__item--clothing">
-                <a class="promo__link" href="all-lots.html"><?=$category_list[$cur_category]; $cur_category++; ?></a>
-            </li>
-            <li class="promo__item promo__item--tools">
-                <a class="promo__link" href="all-lots.html"><?=$category_list[$cur_category]; $cur_category++; ?></a>
-            </li>
-            <li class="promo__item promo__item--other">
-                <a class="promo__link" href="all-lots.html"><?=$category_list[$cur_category]; $cur_category++; ?></a>
-            </li>
+            <?php endforeach; ?>
         </ul>
     </section>
     <section class="lots">
