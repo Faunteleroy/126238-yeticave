@@ -34,7 +34,6 @@ $category_list = [
     'tools' => "Инструменты",
     'other' => "Разное"
 ];
-$cur_category = 0;
 
 $ads_list = [
     0 => [
