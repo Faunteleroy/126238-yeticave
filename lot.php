@@ -16,7 +16,6 @@ function bets_time($time_label) {
     $now = strtotime('now');
 
     $count_time = $now - $time_label;
-    $bet_time;
 
     if ($count_time > SECONDS_IN_DAY) {
         $bet_time = date("d.m.y \в H:i", $time_label);
@@ -136,15 +135,15 @@ function bets_time($time_label) {
                 <div class="history">
                     <h3>История ставок (<span>4</span>)</h3>
                     <!-- заполните эту таблицу данными из массива $bets-->
-                    <?php foreach ($bets as $key => $val): ?>
                     <table class="history__list">
+                    <?php foreach ($bets as $key => $val): ?>
                         <tr class="history__item">
                             <td class="history__name"><!-- имя автора--><?=$val['name'];?></td>
                             <td class="history__price"><!-- цена--><?=$val['price'];?> р</td>
-                            <td class="history__time"><?php print(bets_time($val['ts'])); ?><!-- дата в человеческом формате--></td>
+                            <td class="history__time"><?=bets_time($val['ts']); ?><!-- дата в человеческом формате--></td>
                         </tr>
-                    </table>
                     <?php endforeach; ?>
+                    </table>
                 </div>
             </div>
         </div>
