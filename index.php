@@ -21,8 +21,6 @@ $count_min = str_pad($count_min, 2, "0", STR_PAD_LEFT);
 $lot_time_remaining = $count_hour . ":" . $count_min;
 // далее нужно вычислить оставшееся время до начала следующих суток и записать его в переменную $lot_time_remaining
 
-$title = 'Главная';
-
 require_once('functions.php');
 require_once('data.php');
 
