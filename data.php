@@ -51,4 +51,3 @@ $ads_list = [
         'url' => 'img/lot-6.jpg'
     ]
 ];
-?>

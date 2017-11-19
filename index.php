@@ -27,4 +27,4 @@ require_once('data.php');
 $page_content = renderTemplate('templates/index.php', ['ads_list' => $ads_list, 'category_list' => $category_list, 'lot_time_remaining' => $lot_time_remaining]);
 $layout_content  = renderTemplate('templates/layout.php', ['content' => $page_content, 'title' => 'Главная', 'user_name' => $user_name, 'user_avatar' => $user_avatar, 'is_auth' => $is_auth]);
 print($layout_content);
-?>
+
