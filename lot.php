@@ -1,4 +1,5 @@
 <?php
+require_once('data.php');
 
 // ставки пользователей, которыми надо заполнить таблицу
 $bets = [
@@ -30,6 +31,18 @@ function bets_time($time_label) {
     }
 
     return $bet_time;
+}
+
+$lot = null;
+
+if (isset($_GET['id'])) {
+    $lot_id = $_GET['id'];
+
+    if (isset($ads_list[$lot_id])) {
+        $lot = $ads_list[$lot_id];
+    } else {
+        http_response_code(404);
+    }
 }
 
 ?>
@@ -92,13 +105,14 @@ function bets_time($time_label) {
         </ul>
     </nav>
     <section class="lot-item container">
-        <h2>DC Ply Mens 2016/2017 Snowboard</h2>
+        <?php if (isset($lot)): ?>
+        <h2><?=$lot['name'];?></h2>
         <div class="lot-item__content">
             <div class="lot-item__left">
                 <div class="lot-item__image">
-                    <img src="img/lot-image.jpg" width="730" height="548" alt="Сноуборд">
+                    <img src="<?=$lot['img'];?>" width="730" height="548" alt="Сноуборд">
                 </div>
-                <p class="lot-item__category">Категория: <span>Доски и лыжи</span></p>
+                <p class="lot-item__category">Категория: <span><?=$lot['category'];?></span></p>
                 <p class="lot-item__description">Легкий маневренный сноуборд, готовый дать жару в любом парке, растопив
                     снег
                     мощным щелчкоми четкими дугами. Стекловолокно Bi-Ax, уложенное в двух направлениях, наделяет этот
@@ -118,7 +132,7 @@ function bets_time($time_label) {
                     <div class="lot-item__cost-state">
                         <div class="lot-item__rate">
                             <span class="lot-item__amount">Текущая цена</span>
-                            <span class="lot-item__cost">11 500</span>
+                            <span class="lot-item__cost"><?=$lot['price'];?></span>
                         </div>
                         <div class="lot-item__min-cost">
                             Мин. ставка <span>12 000 р</span>
@@ -147,6 +161,9 @@ function bets_time($time_label) {
                 </div>
             </div>
         </div>
+        <?php else: ?>
+            <h1 style="color: black">Лот с этим ID не найден</h1>
+        <?php endif; ?>
     </section>
 </main>
 
