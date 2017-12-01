@@ -7,7 +7,7 @@
         <div class="form__item <?=$class_error;?>"> <!-- form__item--invalid -->
             <label for="lot-name">Наименование</label>
             <?php $value = (isset($value_field['lot-name']) ? $value_field['lot-name'] : ''); ?>
-            <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота" value=<?=$value;?> required>
+            <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота" value="<?=htmlspecialchars($value);?>" required>
             <?php $span_error = (isset($errors['lot-name']) ? $errors['lot-name'] : ''); ?>
             <span class="form__error"><?=$span_error;?></span>
         </div>
@@ -16,12 +16,18 @@
             <label for="category">Категория</label>
             <select id="category" name="category" required>
                 <option>Выберите категорию</option>
-                <option>Доски и лыжи</option>
-                <option>Крепления</option>
-                <option>Ботинки</option>
-                <option>Одежда</option>
-                <option>Инструменты</option>
-                <option>Разное</option>
+                <?php $value_category = ((isset($value_field['category'])&&($value_field['category']=='Доски и лыжи')) ? 'selected' : ''); ?>
+                <option <?=$value_category;?>>Доски и лыжи</option>
+                <?php $value_category = ((isset($value_field['category'])&&($value_field['category']=='Крепления')) ? 'selected' : ''); ?>
+                <option <?=$value_category;?>>Крепления</option>
+                <?php $value_category = ((isset($value_field['category'])&&($value_field['category']=='Ботинки')) ? 'selected' : ''); ?>
+                <option <?=$value_category;?>>Ботинки</option>
+                <?php $value_category = ((isset($value_field['category'])&&($value_field['category']=='Одежда')) ? 'selected' : ''); ?>
+                <option <?=$value_category;?>>Одежда</option>
+                <?php $value_category = ((isset($value_field['category'])&&($value_field['category']=='Инструменты')) ? 'selected' : ''); ?>
+                <option <?=$value_category;?>>Инструменты</option>
+                <?php $value_category = ((isset($value_field['category'])&&($value_field['category']=='Разное')) ? 'selected' : ''); ?>
+                <option <?=$value_category;?>>Разное</option>
             </select>
             <?php $span_error = (isset($errors['category']) ? $errors['category'] : ''); ?>
             <span class="form__error"><?=$span_error;?></span>
@@ -31,7 +37,7 @@
     <div class="form__item form__item--wide <?=$class_error;?>">
         <label for="message">Описание</label>
         <?php $value = (isset($value_field['message']) ? $value_field['message'] : ''); ?>
-        <textarea id="message" name="message" placeholder="Напишите описание лота" value="<?=$value;?>" required></textarea>
+        <textarea id="message" name="message" placeholder="Напишите описание лота" value="<?=htmlspecialchars($value);?>" required></textarea>
         <?php $span_error = (isset($errors['message']) ? $errors['message'] : ''); ?>
         <span class="form__error"><?=$span_error;?></span>
     </div>
@@ -58,7 +64,7 @@
         <div class="form__item form__item--small <?=$class_error;?>">
             <label for="lot-rate">Начальная цена</label>
             <?php $value = (isset($value_field['lot-rate']) ? $value_field['lot-rate'] : ''); ?>
-            <input id="lot-rate" type="number" name="lot-rate" placeholder="0" value=<?=$value;?> required>
+            <input id="lot-rate" type="number" name="lot-rate" placeholder="0" value="<?=$value;?>" required>
             <?php $span_error = (isset($errors['lot-rate']) ? $errors['lot-rate'] : ''); ?>
             <span class="form__error"><?=$span_error;?></span>
         </div>
@@ -66,7 +72,7 @@
         <div class="form__item form__item--small <?=$class_error;?>">
             <label for="lot-step">Шаг ставки</label>
             <?php $value = (isset($value_field['lot-step']) ? $value_field['lot-step'] : ''); ?>
-            <input id="lot-step" type="number" name="lot-step" placeholder="0" value=<?=$value;?> required>
+            <input id="lot-step" type="number" name="lot-step" placeholder="0" value="<?=$value;?>" required>
             <?php $span_error = (isset($errors['lot-step']) ? $errors['lot-step'] : ''); ?>
             <span class="form__error"><?=$span_error;?></span>
         </div>
@@ -74,7 +80,7 @@
         <div class="form__item <?=$class_error;?>">
             <label for="lot-date">Дата окончания торгов</label>
             <?php $value = (isset($value_field['lot-date']) ? $value_field['lot-date'] : ''); ?>
-            <input class="form__input-date" id="lot-date" type="date" name="lot-date" value=<?=$value;?> required>
+            <input class="form__input-date" id="lot-date" type="date" name="lot-date" value="<?=$value;?>" required>
             <?php $span_error = (isset($errors['lot-date']) ? $errors['lot-date'] : ''); ?>
             <span class="form__error"><?=$span_error;?></span>
         </div>

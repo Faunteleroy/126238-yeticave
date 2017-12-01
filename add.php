@@ -4,63 +4,86 @@ require_once('data.php');
 
 $layout_index = false;
 
-$name_field = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
+$main_nav_content = renderTemplate('templates/main-nav.php', []);
+
+$required = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
 $errors =[];
-$errors_templates = [
+$dict = [
     'message' =>  "Напишите описание лота",
     'lot-rate' => "Введите начальную цену, используя только цифры",
     'lot-step' => "Введите шаг ставки, используя только цифры",
     'lot-date' => "Введите дату завершения торгов",
     'category' => "Выберите категорию",
-    'lot-name' => "Введите наименование лота",
-    'file' => "Загрузите картинку товара"
+    'lot-name' => "Введите наименование лота"
 ];
-$value_field =[];
 
-$main_nav_content = renderTemplate('templates/main-nav.php', []);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $new_lot = $_POST;
 
-if (isset($_POST)) {
-    foreach ($name_field as $value) {
-        $error = null;
-        if (isset($_POST[$value])) {
-            if (($value == 'lot-rate') or ($value == 'lot-step')) {
-                $error = (ctype_digit($_POST[$value])? null : $errors_templates[$value]);
+    foreach ($_POST as $key => $value) {
+        if (in_array($key, $required)) {
+            if (!$value) {
+                $errors[$key] = $dict[$key];
             }
-            if ($error == null) {
-                $value_field[$value] = $_POST[$value];
-            }
-        } else {
-            $error = $errors_templates[$value];
         }
-        if (isset($error)) {
-            $errors[$value] = $error;
+    }
+
+    if (isset($_FILES['file']['name'])) {
+        $tmp_name = $_FILES['file']['tmp_name'];
+        $path = $_FILES['file']['name'];
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $file_type = finfo_file($finfo, $tmp_name);
+        if ($file_type !== "image/img" or $file_type !== "image/png") {
+            $errors['file'] = 'Загрузите файл в формате img/png';
         }
-    };
-    if (isset($_FILES['file'])) {
-        $file = $_FILES['file'];
-        move_uploaded_file ( $file,'/img' );
+        else {
+            move_uploaded_file($tmp_name, 'img/' . $path);
+            $new_lot['img'] = $path;
+        }
     } else {
-        $errors['file'] = $errors_templates['file'];
+        $errors['file'] = 'Вы не загрузили файл';
     }
-    if (isset($errors)) {
-        $page_content = renderTemplate('templates/add.php', ['ads_list' => $ads_list, 'category_list' => $category_list, 'main_nav' => $main_nav_content, 'errors' => $errors, '$value_field' => $value_field]);
-    } else {
-        $bets =[];
-        $file_name = '/img'.$file['name'];
-        $lot = [
-            'name' => $_POST['name'],
-            'category' => $_POST['category'],
-            'price' => $_POST['lot-rate'],
-            'img' => $file_name
-        ];
-        $page_content = renderTemplate('templates/lot.php', ['ads_list' => $ads_list, 'category_list' => $category_list, 'main_nav' => $main_nav_content, 'lot' => $lot, 'bets' => $bets]);
+
+
+    if (count($errors)) {
+
+        $page_content = renderTemplate('templates/add.php', [
+            'ads_list' => $ads_list,
+            'category_list' => $category_list,
+            'main_nav' => $main_nav_content,
+            'errors' => $errors,
+            'new_lot' => $value_field]);
     }
-} else {
-    $page_content = renderTemplate('templates/add.php', ['ads_list' => $ads_list, 'category_list' => $category_list, 'main_nav' => $main_nav_content, 'errors' => $errors, 'value_field' => $value_field]);
+    else {
+        $new_lot['price'] = $_POST['lot-rate'];
+        $page_content = renderTemplate('templates/lot.php', [
+            'ads_list' => $ads_list,
+            'category_list' => $category_list,
+            'main_nav' => $main_nav_content,
+            'new_lot' => $lot
+        ]);
+    }
+}
+else {
+    $page_content = renderTemplate('templates/add.php', [
+        'ads_list' => $ads_list,
+        'category_list' => $category_list,
+        'main_nav' => $main_nav_content,
+        'errors' => $errors,
+        'new_lot' => $value_field
+    ]);
 }
 
 
-$layout_content  = renderTemplate('templates/layout.php', ['content' => $page_content, 'title' => 'Добавление лота', 'user_name' => $user_name, 'user_avatar' => $user_avatar, 'is_auth' => $is_auth, 'layout_index' => $layout_index]);
+$layout_content  = renderTemplate('templates/layout.php', [
+    'content' => $page_content,
+    'title' => 'Добавление лота',
+    'user_name' => $user_name,
+    'user_avatar' => $user_avatar,
+    'is_auth' => $is_auth,
+    'layout_index' => $layout_index
+]);
 
 print($layout_content);
 
