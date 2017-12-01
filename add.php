@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'category_list' => $category_list,
             'main_nav' => $main_nav_content,
             'errors' => $errors,
-            'new_lot' => $value_field]);
+            'value_field' => $new_lot]);
     }
     else {
         $new_lot['price'] = $_POST['lot-rate'];
