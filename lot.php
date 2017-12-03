@@ -50,8 +50,21 @@ $layout_index = false;
 require_once('functions.php');
 
 $main_nav_content = renderTemplate('templates/main-nav.php', []);
-$page_content = renderTemplate('templates/lot.php', ['ads_list' => $ads_list, 'category_list' => $category_list, 'main_nav' => $main_nav_content, 'lot' => $lot, 'bets' => $bets]);
-$layout_content  = renderTemplate('templates/layout.php', ['content' => $page_content, 'user_name' => $user_name, 'user_avatar' => $user_avatar, 'title' => $lot['name'], 'is_auth' => $is_auth, 'layout_index' => $layout_index]);
+$page_content = renderTemplate('templates/lot.php', [
+    'ads_list' => $ads_list,
+    'category_list' => $category_list,
+    'main_nav' => $main_nav_content,
+    'lot' => $lot,
+    'bets' => $bets
+]);
+$layout_content  = renderTemplate('templates/layout.php', [
+    'content' => $page_content,
+    'user_name' => $user_name,
+    'user_avatar' => $user_avatar,
+    'title' => $lot['name'],
+    'is_auth' => $is_auth,
+    'layout_index' => $layout_index
+]);
 
 print($layout_content);
 

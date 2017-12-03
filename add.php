@@ -7,7 +7,6 @@ $layout_index = false;
 $main_nav_content = renderTemplate('templates/main-nav.php', []);
 
 $required = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
-$errors =[];
 $dict = [
     'message' =>  "Напишите описание лота",
     'lot-rate' => "Введите начальную цену, используя только цифры",
@@ -16,9 +15,11 @@ $dict = [
     'category' => "Выберите категорию",
     'lot-name' => "Введите наименование лота"
 ];
+$number_field = ['lot-rate','lot-step'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $new_lot = $_POST;
+    $errors =[];
 
     foreach ($_POST as $key => $value) {
         if (in_array($key, $required)) {
@@ -26,15 +27,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $errors[$key] = $dict[$key];
             }
         }
+        if (in_array($key, $number_field)) {
+            $number = (int) $key;
+            if (!is_numeric($number)) {
+                $errors[$key] = $dict[$key];
+            }
+        }
     }
 
-    if (isset($_FILES['file']['name'])) {
+    if (!empty($_FILES['file']['name'])) {
         $tmp_name = $_FILES['file']['tmp_name'];
         $path = $_FILES['file']['name'];
+        $supported_types = ['image/png', 'image/jpeg', 'image/jpg'];
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($finfo, $tmp_name);
-        if ($file_type !== "image/img" or $file_type !== "image/png") {
+
+        if (!in_array($file_type, $supported_types)) {
             $errors['file'] = 'Загрузите файл в формате img/png';
         }
         else {
@@ -53,15 +62,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'category_list' => $category_list,
             'main_nav' => $main_nav_content,
             'errors' => $errors,
-            'value_field' => $new_lot]);
+            'value_field' => $new_lot
+        ]);
     }
     else {
-        $new_lot['price'] = $_POST['lot-rate'];
+        $lot = [
+            'name' => $new_lot['lot-name'],
+            'category' => $new_lot['category'],
+            'price' => $_POST['lot-rate'],
+            'img' => $new_lot['img']
+        ];
         $page_content = renderTemplate('templates/lot.php', [
             'ads_list' => $ads_list,
             'category_list' => $category_list,
             'main_nav' => $main_nav_content,
-            'new_lot' => $lot
+            'lot' => $lot,
+            'bets' => []
         ]);
     }
 }
@@ -70,8 +86,8 @@ else {
         'ads_list' => $ads_list,
         'category_list' => $category_list,
         'main_nav' => $main_nav_content,
-        'errors' => $errors,
-        'new_lot' => $value_field
+        'errors' => [],
+        'value_field' => []
     ]);
 }
 

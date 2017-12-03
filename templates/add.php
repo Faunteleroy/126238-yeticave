@@ -1,5 +1,5 @@
 <?=$main_nav;?>
-<?php $class_error = (isset($errors) ? 'form--invalid' : ''); ?>
+<?php $class_error = ((!empty($errors)) ? 'form--invalid' : ''); ?>
 <form class="form form--add-lot container <?=$class_error;?>" action="../add.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
     <h2>Добавление лота</h2>
     <div class="form__container-two">
@@ -15,19 +15,11 @@
         <div class="form__item <?=$class_error;?>">
             <label for="category">Категория</label>
             <select id="category" name="category" required>
-                <option>Выберите категорию</option>
-                <?php $value_category = ((isset($value_field['category'])&&($value_field['category']=='Доски и лыжи')) ? 'selected' : ''); ?>
-                <option <?=$value_category;?>>Доски и лыжи</option>
-                <?php $value_category = ((isset($value_field['category'])&&($value_field['category']=='Крепления')) ? 'selected' : ''); ?>
-                <option <?=$value_category;?>>Крепления</option>
-                <?php $value_category = ((isset($value_field['category'])&&($value_field['category']=='Ботинки')) ? 'selected' : ''); ?>
-                <option <?=$value_category;?>>Ботинки</option>
-                <?php $value_category = ((isset($value_field['category'])&&($value_field['category']=='Одежда')) ? 'selected' : ''); ?>
-                <option <?=$value_category;?>>Одежда</option>
-                <?php $value_category = ((isset($value_field['category'])&&($value_field['category']=='Инструменты')) ? 'selected' : ''); ?>
-                <option <?=$value_category;?>>Инструменты</option>
-                <?php $value_category = ((isset($value_field['category'])&&($value_field['category']=='Разное')) ? 'selected' : ''); ?>
-                <option <?=$value_category;?>>Разное</option>
+                <option value="">Выберите категорию</option>
+                <?php foreach ($category_list as $key => $val): ?>
+                    <?php $value_category = ((isset($value_field['category'])&&($value_field['category']==$val)) ? 'selected' : ''); ?>
+                    <option <?=$value_category;?>> <?=$val; ?></option>
+                <?php endforeach; ?>
             </select>
             <?php $span_error = (isset($errors['category']) ? $errors['category'] : ''); ?>
             <span class="form__error"><?=$span_error;?></span>
@@ -37,7 +29,7 @@
     <div class="form__item form__item--wide <?=$class_error;?>">
         <label for="message">Описание</label>
         <?php $value = (isset($value_field['message']) ? $value_field['message'] : ''); ?>
-        <textarea id="message" name="message" placeholder="Напишите описание лота" value="<?=htmlspecialchars($value);?>" required></textarea>
+        <textarea id="message" name="message" placeholder="Напишите описание лота" required><?=htmlspecialchars($value);?></textarea>
         <?php $span_error = (isset($errors['message']) ? $errors['message'] : ''); ?>
         <span class="form__error"><?=$span_error;?></span>
     </div>
@@ -51,7 +43,7 @@
             </div>
         </div>
         <div class="form__input-file">
-            <input class="visually-hidden" name="file" type="file" id="photo2" value="">
+            <input class="visually-hidden" name="file" type="file" id="photo2" value="" required>
             <label for="photo2">
                 <span>+ Добавить</span>
             </label>
