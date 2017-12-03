@@ -21,10 +21,13 @@ $count_min = str_pad($count_min, 2, "0", STR_PAD_LEFT);
 $lot_time_remaining = $count_hour . ":" . $count_min;
 // далее нужно вычислить оставшееся время до начала следующих суток и записать его в переменную $lot_time_remaining
 
+$layout_index = true;
+
 require_once('functions.php');
 require_once('data.php');
 
 $page_content = renderTemplate('templates/index.php', ['ads_list' => $ads_list, 'category_list' => $category_list, 'lot_time_remaining' => $lot_time_remaining]);
-$layout_content  = renderTemplate('templates/layout.php', ['content' => $page_content, 'title' => 'Главная', 'user_name' => $user_name, 'user_avatar' => $user_avatar, 'is_auth' => $is_auth]);
+$layout_content  = renderTemplate('templates/layout.php', ['content' => $page_content, 'title' => 'Главная', 'user_name' => $user_name, 'user_avatar' => $user_avatar, 'is_auth' => $is_auth, 'layout_index' => $layout_index]);
+
 print($layout_content);
 

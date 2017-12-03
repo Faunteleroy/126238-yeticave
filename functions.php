@@ -8,9 +8,9 @@ function renderTemplate($templ_path, $templ_array) {
         require_once($templ_path);
         $templ_html = ob_get_clean();
 
-        return $templ_html;
     } else {
-        return '';
+        $templ_html = '';
     }
+    return $templ_html;
 }
 
