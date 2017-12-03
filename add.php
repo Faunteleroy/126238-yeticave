@@ -44,11 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $file_type = finfo_file($finfo, $tmp_name);
 
         if (!in_array($file_type, $supported_types)) {
-            $errors['file'] = 'Загрузите файл в формате img/png';
+            $errors['file'] = 'Загрузите файл в формате png, jpg или jpeg';
         }
         else {
             move_uploaded_file($tmp_name, 'img/' . $path);
-            $new_lot['img'] = $path;
+            $new_lot['img'] = 'img/' . $path;
         }
     } else {
         $errors['file'] = 'Вы не загрузили файл';
