@@ -28,8 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
         if (in_array($key, $number_field)) {
-            $number = (int) $key;
-            if (!is_numeric($number)) {
+            if (!is_numeric($value)) {
                 $errors[$key] = $dict[$key];
             }
         }
