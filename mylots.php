@@ -5,11 +5,10 @@ require_once('functions.php');
 $layout_index = false;
 
 $my_bets =[];
-$lots_count = count($ads_list);
-for ($id = 0; $id < $lots_count; $id ++) {
+foreach ($ads_list as $id => $val) {
     if (isset($_COOKIE['bet-' . $id])) {
         $bet = json_decode($_COOKIE['bet-' . $id], true);
-        foreach ($bet as $key => $val) {
+        foreach ($bet as $key) {
             $bet_data = $ads_list[$id];
             $bet['name'] = $bet_data['name'];
             $bet['category'] = $bet_data['category'];

@@ -24,7 +24,7 @@ if (isset($_GET['id'])) {
     }
 }
 
-$bet_lot = (isset($_COOKIE['bet-' . $lot_id])) ? true : false;
+$bet_lot = isset($_COOKIE['bet-' . $lot_id]);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (($_POST['cost'] > 0)&&(is_numeric($_POST['cost']))) {
