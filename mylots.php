@@ -12,7 +12,7 @@ for ($id = 0; $id < $lots_count; $id ++) {
         $bet['name'] = $ads_list[$val['name']];
         $bet['category'] = $ads_list[$val['category']];
         $bet['img'] = $ads_list[$val['img']];
-        $my_bets[$key] = $bet;
+        $my_bets[$id] = $bet;
     }
 }
 
