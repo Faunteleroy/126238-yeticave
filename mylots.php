@@ -9,12 +9,16 @@ $lots_count = count($ads_list);
 for ($id = 0; $id < $lots_count; $id ++) {
     if (isset($_COOKIE['bet-' . $id])) {
         $bet = json_decode($_COOKIE['bet-' . $id], true);
-        $bet['name'] = $ads_list[$val['name']];
-        $bet['category'] = $ads_list[$val['category']];
-        $bet['img'] = $ads_list[$val['img']];
-        $my_bets[$id] = $bet;
+        foreach ($bet as $key => $val) {
+            $bet_data = $ads_list[$id];
+            $bet['name'] = $bet_data['name'];
+            $bet['category'] = $bet_data['category'];
+            $bet['img'] = $bet_data['img'];
+            $my_bets[$id] = $bet;
+        }
     }
 }
+krsort($my_bets);
 
 $main_nav_content = renderTemplate('templates/main-nav.php', ['category_list' => $category_list]);
 
