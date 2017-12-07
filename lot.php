@@ -1,5 +1,8 @@
 <?php
 require_once('data.php');
+require_once('functions.php');
+
+$layout_index = false;
 
 // ставки пользователей, которыми надо заполнить таблицу
 $bets = [
@@ -9,35 +12,11 @@ $bets = [
     ['name' => 'Семён', 'price' => 10000, 'ts' => strtotime('last week')]
 ];
 
-define("SECONDS_IN_MIN", 60);
-define("SECONDS_IN_HOUR", 3600);
-define("SECONDS_IN_DAY", 86400);
-
-function bets_time($time_label) {
-    $now = strtotime('now');
-
-    $count_time = $now - $time_label;
-
-    if ($count_time > SECONDS_IN_DAY) {
-        $bet_time = date("d.m.y \в H:i", $time_label);
-    }
-    else if ($count_time >= SECONDS_IN_HOUR) {
-        $count_hour = floor(($now - $time_label) / SECONDS_IN_HOUR);
-        $bet_time = $count_hour . " часов назад";
-    }
-    else {
-        $count_min = floor((($now - $time_label) % SECONDS_IN_HOUR) / SECONDS_IN_MIN);
-        $bet_time = $count_min . " минут назад";
-    }
-
-    return $bet_time;
-}
-
 $lot = null;
+$lot_id = null;
 
 if (isset($_GET['id'])) {
     $lot_id = $_GET['id'];
-
     if (isset($ads_list[$lot_id])) {
         $lot = $ads_list[$lot_id];
     } else {
@@ -45,17 +24,29 @@ if (isset($_GET['id'])) {
     }
 }
 
-$layout_index = false;
+$bet_lot = (isset($_COOKIE['bet-' . $lot_id])) ? true : false;
 
-require_once('functions.php');
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (($_POST['cost'] > 0)&&(is_numeric($_POST['cost']))) {
+        $bet = [
+            'id' => $lot_id,
+            'price' => $_POST['cost'],
+            'time' => $_SERVER['REQUEST_TIME']
+        ];
+        setcookie('bet-' . $lot_id, json_encode($bet), strtotime("+30 days"));
+        header('Location: mylots.php');
+        exit();
+    }
+}
 
-$main_nav_content = renderTemplate('templates/main-nav.php', []);
+$main_nav_content = renderTemplate('templates/main-nav.php', ['category_list' => $category_list]);
 $page_content = renderTemplate('templates/lot.php', [
     'ads_list' => $ads_list,
     'category_list' => $category_list,
     'main_nav' => $main_nav_content,
     'lot' => $lot,
-    'bets' => $bets
+    'bets' => $bets,
+    'bet_lot' => $bet_lot
 ]);
 $layout_content  = renderTemplate('templates/layout.php', [
     'content' => $page_content,
@@ -63,7 +54,8 @@ $layout_content  = renderTemplate('templates/layout.php', [
     'user_avatar' => $user_avatar,
     'title' => $lot['name'],
     'is_auth' => $is_auth,
-    'layout_index' => $layout_index
+    'layout_index' => $layout_index,
+    'main_nav' => $main_nav_content
 ]);
 
 print($layout_content);
