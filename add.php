@@ -4,7 +4,7 @@ require_once('data.php');
 
 $layout_index = false;
 
-$main_nav_content = renderTemplate('templates/main-nav.php', []);
+$main_nav_content = renderTemplate('templates/main-nav.php', ['category_list' => $category_list]);
 
 $required = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
 $dict = [
@@ -97,7 +97,8 @@ $layout_content  = renderTemplate('templates/layout.php', [
     'user_name' => $user_name,
     'user_avatar' => $user_avatar,
     'is_auth' => $is_auth,
-    'layout_index' => $layout_index
+    'layout_index' => $layout_index,
+    'main_nav' => $main_nav_content
 ]);
 
 print($layout_content);

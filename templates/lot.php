@@ -33,13 +33,15 @@
                             Мин. ставка <span>12 000 р</span>
                         </div>
                     </div>
-                    <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post">
+                    <?php if ($bet_lot == false): ?>
+                    <form class="lot-item__form" method="post">
                         <p class="lot-item__form-item">
                             <label for="cost">Ваша ставка</label>
-                            <input id="cost" type="number" name="cost" placeholder="12 000">
+                            <input id="cost" type="number" name="cost" placeholder="12 000" required>
                         </p>
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>
+                    <?php endif; ?>
                 </div>
                 <div class="history">
                     <?php if (!empty($bets)) : ?>

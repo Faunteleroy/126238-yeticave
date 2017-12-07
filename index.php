@@ -26,8 +26,21 @@ $layout_index = true;
 require_once('functions.php');
 require_once('data.php');
 
-$page_content = renderTemplate('templates/index.php', ['ads_list' => $ads_list, 'category_list' => $category_list, 'lot_time_remaining' => $lot_time_remaining]);
-$layout_content  = renderTemplate('templates/layout.php', ['content' => $page_content, 'title' => 'Главная', 'user_name' => $user_name, 'user_avatar' => $user_avatar, 'is_auth' => $is_auth, 'layout_index' => $layout_index]);
+$main_nav_content = renderTemplate('templates/main-nav.php', ['category_list' => $category_list]);
+$page_content = renderTemplate('templates/index.php', [
+    'ads_list' => $ads_list,
+    'category_list' => $category_list,
+    'lot_time_remaining' => $lot_time_remaining
+]);
+$layout_content  = renderTemplate('templates/layout.php', [
+    'content' => $page_content,
+    'title' => 'Главная',
+    'user_name' => $user_name,
+    'user_avatar' => $user_avatar,
+    'is_auth' => $is_auth,
+    'layout_index' => $layout_index,
+    'main_nav' => $main_nav_content
+]);
 
 print($layout_content);
 
