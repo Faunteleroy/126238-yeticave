@@ -25,12 +25,13 @@
         <a class="main-header__add-lot button" href="../add.php">Добавить лот</a>
 
         <nav class="user-menu">
-            <?php if ($is_auth == true): ?>
+            <?php if (isset($_SESSION['user'])): ?>
                 <div class="user-menu__image">
                     <img src="<?=$user_avatar; ?>" width="40" height="40" alt="Пользователь">
                 </div>
                 <div class="user-menu__logged">
-                    <p><?=strip_tags($user_name); ?></p>
+                    <p><?=strip_tags($_SESSION['user']['name']); ?></p>
+                    <a href="../logout.php">Выйти</a>
                 </div>
             <?php else: ?>
                 <ul class="user-menu__list">
@@ -38,7 +39,7 @@
                         <a href="#">Регистрация</a>
                     </li>
                     <li class="user-menu__item">
-                        <a href="#">Вход</a>
+                        <a href="../login.php">Вход</a>
                     </li>
                 </ul>
             <?php endif; ?>

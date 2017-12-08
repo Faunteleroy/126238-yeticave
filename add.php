@@ -2,6 +2,15 @@
 require_once('functions.php');
 require_once('data.php');
 
+session_start();
+
+if (!isset($_SESSION['user'])) {
+    http_response_code(403);
+    header("Location: /index.php");
+    exit();
+}
+
+
 $layout_index = false;
 
 $main_nav_content = renderTemplate('templates/main-nav.php', ['category_list' => $category_list]);
