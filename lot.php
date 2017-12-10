@@ -4,6 +4,8 @@ require_once('functions.php');
 
 $layout_index = false;
 
+session_start();
+
 // ставки пользователей, которыми надо заполнить таблицу
 $bets = [
     ['name' => 'Иван', 'price' => 11500, 'ts' => strtotime('-' . rand(1, 50) .' minute')],

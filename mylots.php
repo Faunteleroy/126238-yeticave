@@ -4,6 +4,8 @@ require_once('functions.php');
 
 $layout_index = false;
 
+session_start();
+
 $my_bets =[];
 foreach ($ads_list as $id => $val) {
     if (isset($_COOKIE['bet-' . $id])) {
