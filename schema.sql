@@ -7,6 +7,16 @@ CREATE TABLE categories (
   name CHAR(150)
 );
 
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  date_register DATETIME DEFAULT CURRENT_TIMESTAMP,
+  email CHAR(150),
+  name CHAR(150),
+  password CHAR(150),
+  avatar CHAR(255),
+  contacts CHAR(255)
+);
+
 CREATE TABLE lots (
   id INT AUTO_INCREMENT PRIMARY KEY,
   date_creation DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -28,16 +38,6 @@ CREATE TABLE bets (
   price DECIMAL,
   id_user INT,
   id_lot INT
-);
-
-CREATE TABLE users (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  date_register DATETIME DEFAULT CURRENT_TIMESTAMP,
-  email CHAR(150),
-  name CHAR(150),
-  password CHAR(150),
-  avatar CHAR(255),
-  contacts CHAR(255)
 );
 
 CREATE UNIQUE INDEX email ON users(email);
