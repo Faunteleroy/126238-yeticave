@@ -1,25 +1,17 @@
 <?php
-require_once('functions.php');
 require_once('data.php');
+require_once('functions.php');
 require_once('mysql_helper.php');
 require_once ('init.php');
 
+$layout_index = false;
+
 session_start();
 
-if (!isset($_SESSION['user'])) {
-    http_response_code(403);
-    header("Location: /index.php");
-    exit();
-}
+$main_nav_content = renderTemplate('templates/main-nav.php', ['category_list' => $category_list]);
 
-$sql_categories = 'SELECT * FROM categories';
-$result = mysqli_query($con, $sql_categories);
-
-if ($result) {
-    $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-}
-else {
-    $error = mysqli_error($con);
+if (isset($_SESSION['user'])) {
+    $error = 'Вы уже вошли';
 
     $page_content = renderTemplate('templates/error.php', [
         'category_list' => $category_list,
@@ -40,23 +32,18 @@ else {
     exit();
 }
 
-$layout_index = false;
-
-$main_nav_content = renderTemplate('templates/main-nav.php', ['category_list' => $category_list]);
-
-$required = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
+$required = ['email', 'password', 'name', 'message'];
 $dict = [
-    'message' =>  "Напишите описание лота",
-    'lot-rate' => "Введите начальную цену, используя только цифры",
-    'lot-step' => "Введите шаг ставки, используя только цифры",
-    'lot-date' => "Введите дату завершения торгов",
-    'category' => "Выберите категорию",
-    'lot-name' => "Введите наименование лота"
+    'email' =>  "Введите e-mail",
+    'password' => "Введите пароль",
+    'name' => "Введите имя",
+    'message' => "Напишите как с вами связатьсяв",
+    'email-registered' => "Пользователь с таким e-mail уже существует",
+    'email-invalid' => "Такой e-mail не существует"
 ];
-$number_field = ['lot-rate','lot-step'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $new_lot = $_POST;
+    $new_account = $_POST;
     $errors =[];
 
     foreach ($_POST as $key => $value) {
@@ -65,10 +52,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $errors[$key] = $dict[$key];
             }
         }
-        if (in_array($key, $number_field)) {
-            if (!is_numeric($value)) {
-                $errors[$key] = $dict[$key];
+        if ($key == 'email') {
+            $sql_user = "SELECT id FROM users WHERE email = '$value'";
+            $user_registered = mysqli_query($con, $sql_user);
+
+            if ($user_registered) {
+                $errors['email'] = $dict['email-registered'];
             }
+            $email_real = filter_var($value, FILTER_VALIDATE_EMAIL);
+            if (!$email_real) {
+                $errors['email'] = $dict['email-invalid'];
+            }
+
         }
     }
 
@@ -85,41 +80,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         else {
             move_uploaded_file($tmp_name, 'img/' . $path);
-            $new_lot['img'] = 'img/' . $path;
+            $new_account['img'] = 'img/' . $path;
         }
-    } else {
-        $errors['file'] = 'Вы не загрузили файл';
     }
-
 
     if (count($errors)) {
 
-        $page_content = renderTemplate('templates/add.php', [
+        $page_content = renderTemplate('templates/sign-up.php', [
             'ads_list' => $ads_list,
             'category_list' => $category_list,
             'main_nav' => $main_nav_content,
             'errors' => $errors,
-            'value_field' => $new_lot
+            'value_field' => $new_account
         ]);
     }
     else {
-        $lot = [
-            'name' => $new_lot['lot-name'],
-            'category' => $new_lot['category'],
-            'price' => $_POST['lot-rate'],
-            'img' => $new_lot['img']
-        ];
-        $page_content = renderTemplate('templates/lot.php', [
-            'ads_list' => $ads_list,
-            'category_list' => $category_list,
-            'main_nav' => $main_nav_content,
-            'lot' => $lot,
-            'bets' => []
-        ]);
-    }
+        $safe_email = mysqli_real_escape_string($con, $_POST['email']);
+        $safe_name = mysqli_real_escape_string($con, $_POST['name']);
+        $safe_password = mysqli_real_escape_string($con, password_hash($_POST['password']));
+        $safe_contacts = mysqli_real_escape_string($con, $_POST['message']);
+        $avatar = isset($new_account['img']);
+        $sql = "INSERT INTO users (email, name, password, avatar, contacts)
+                VALUES ('$safe_email', '$safe_name', '$safe_password', $avatar ,$safe_contacts)";
+}
+
+
 }
 else {
-    $page_content = renderTemplate('templates/add.php', [
+    $page_content = renderTemplate('templates/sign-up.php', [
         'ads_list' => $ads_list,
         'category_list' => $category_list,
         'main_nav' => $main_nav_content,
@@ -131,14 +119,12 @@ else {
 
 $layout_content  = renderTemplate('templates/layout.php', [
     'content' => $page_content,
-    'title' => 'Добавление лота',
     'user_name' => $user_name,
     'user_avatar' => $user_avatar,
+    'title' => 'Регистрация',
     'is_auth' => $is_auth,
     'layout_index' => $layout_index,
     'main_nav' => $main_nav_content
 ]);
 
 print($layout_content);
-
-
