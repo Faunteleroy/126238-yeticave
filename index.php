@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+require_once('functions.php');
+require_once('data.php');
+require_once('mysql_helper.php');
+require_once ('init.php');
+
 // устанавливаем часовой пояс в Московское время
 date_default_timezone_set('Europe/Moscow');
 
@@ -24,9 +29,6 @@ $lot_time_remaining = $count_hour . ":" . $count_min;
 // далее нужно вычислить оставшееся время до начала следующих суток и записать его в переменную $lot_time_remaining
 
 $layout_index = true;
-
-require_once('functions.php');
-require_once('data.php');
 
 $main_nav_content = renderTemplate('templates/main-nav.php', ['category_list' => $category_list]);
 $page_content = renderTemplate('templates/index.php', [
